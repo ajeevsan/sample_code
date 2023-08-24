@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Form to Flask Example</title>
+</head>
+<body>
+    <h1>Send Data to Flask Backend</h1>
+    <form id="data-form">
+        <label for="input-data">Enter Data:</label>
+        <input type="text" id="input-data" name="input-data">
+        <button type="submit">Submit</button>
+    </form>
+
+    <h1>Received Data</h1>
+    <div id="received-data"></div>
+
+    <script>
+        document.getElementById("data-form").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            var inputData = document.getElementById("input-data").value;
+            console.log(inputData)
+            fetch("/send-data", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ "inputData": inputData })
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Update the received-data div with the response from the backend
+                var receivedDataDiv = document.getElementById("received-data");
+                console.log(`receivedDataDiv`, receivedDataDiv);  // Corrected variable name
+                receivedDataDiv.textContent = "Received Data: " + data.receivedData;
+            })
+            .catch(error => {
+                console.error("Error:", error);
+            });
+        
+        });
+    </script>
+</body>
+</html>
